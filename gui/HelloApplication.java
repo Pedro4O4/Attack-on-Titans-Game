@@ -1,4 +1,7 @@
 package game.gui;
+import javafx.animation.TranslateTransition;
+import javafx.util.Duration;
+
 
 import game.engine.Battle;
 import game.engine.exceptions.InsufficientResourcesException;
@@ -810,6 +813,8 @@ public class HelloApplication extends Application implements EventHandler<Action
 
 
 
+
+
     public static void moveTitan() {
         int count = 0;
         gridPane1.getChildren().clear();
@@ -820,14 +825,18 @@ public class HelloApplication extends Application implements EventHandler<Action
 
         for (Lane l : lanes) {
             Label laneHealthLabel = new Label("Danger Level: " + l.getDangerLevel());
-
             laneHealthLabel.setTranslateX(10);
             laneHealthLabel.setTranslateY(10);
 
             for (Titan t : l.getTitans()) {
                 Rectangle rectangle = new Rectangle();
                 Label damageLabel = new Label("Damage: " + t.getDamage());
+                damageLabel.setFont(new Font("Arial", 16));
+                damageLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+
                 Label healthLabel = new Label("Health: " + t.getCurrentHealth());
+                healthLabel.setFont(new Font("Arial", 16));
+                healthLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
 
                 if (t instanceof PureTitan) {
                     rectangle.setFill(Color.RED);
@@ -838,7 +847,6 @@ public class HelloApplication extends Application implements EventHandler<Action
                     rectangle.setTranslateY(21);
                     rectangle.setWidth(50);
                     rectangle.setHeight(50);
-                    rectangle.setTranslateX(t.getDistance() * 5);
                 } else if (t instanceof ArmoredTitan) {
                     rectangle.setFill(Color.BLUE);
                     rectangle.setTranslateY(42);
@@ -851,10 +859,19 @@ public class HelloApplication extends Application implements EventHandler<Action
                     rectangle.setHeight(90);
                 }
 
-                rectangle.setTranslateX(t.getDistance() * 10);
-                damageLabel.setTranslateX(rectangle.getTranslateX() + 20);
+                // Set initial position off-screen to the right
+                double initialX = 1000;
+                rectangle.setTranslateX(initialX);
+
+                double targetX = t.getDistance() * 10;
+                TranslateTransition transition = new TranslateTransition(Duration.seconds(1), rectangle);
+                transition.setFromX(initialX);
+                transition.setToX(targetX);
+                transition.play();
+
+                damageLabel.setTranslateX(targetX + 10);
                 damageLabel.setTranslateY(rectangle.getTranslateY() + 20);
-                healthLabel.setTranslateX(rectangle.getTranslateX() + 20);
+                healthLabel.setTranslateX(targetX + 10);
                 healthLabel.setTranslateY(rectangle.getTranslateY() + 40);
 
                 if (count == 0) {
