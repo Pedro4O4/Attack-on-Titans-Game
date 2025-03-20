@@ -60,25 +60,29 @@ public class HelloApplication extends Application implements EventHandler<Action
     private static GridPane gridPane5;
 
 
+
     @Override
     public void start(Stage primaryStage) throws IOException {
-        AnchorPane root = Easymode();
+        AnchorPane root = new AnchorPane();
         root = Hardmode();
         root = new AnchorPane();
         root.setPrefSize(1000, 800);
+        root.setStyle("-fx-background-color: linear-gradient(to bottom, #1e3c72, #2a5298);");
 
-        Button btnInstructions = new Button("instructions");
+        Button btnInstructions = new Button("Instructions");
         btnInstructions.setLayoutX(418);
         btnInstructions.setLayoutY(480);
         btnInstructions.setPrefSize(151, 61);
         btnInstructions.setFont(new Font("Ink Free", 24));
-        btnInstructions.setOnAction(this);
+        btnInstructions.setStyle("-fx-background-color: #f0ad4e; -fx-text-fill: white; -fx-background-radius: 10;");
+        btnInstructions.setOnAction(this::Instructions);
 
         Button btnStart = new Button("Start");
         btnStart.setLayoutX(418);
         btnStart.setLayoutY(365);
         btnStart.setPrefSize(151, 71);
         btnStart.setFont(new Font("Ink Free", 34));
+        btnStart.setStyle("-fx-background-color: #5cb85c; -fx-text-fill: white; -fx-background-radius: 10;");
         btnStart.setOnAction(this);
 
         switchMode = new ToggleGroup();
@@ -88,6 +92,7 @@ public class HelloApplication extends Application implements EventHandler<Action
         easy.setLayoutY(286);
         easy.setFont(new Font("Ink Free", 25));
         easy.setToggleGroup(switchMode);
+        easy.setStyle("-fx-text-fill: white;");
         easy.setOnAction(event -> easy());
 
         hard = new RadioButton("Hard Mode");
@@ -95,6 +100,7 @@ public class HelloApplication extends Application implements EventHandler<Action
         hard.setLayoutY(286);
         hard.setFont(new Font("Ink Free", 25));
         hard.setToggleGroup(switchMode);
+        hard.setStyle("-fx-text-fill: white;");
         hard.setOnAction(event -> hard());
 
         label = new Label("Select Mode");
@@ -102,6 +108,7 @@ public class HelloApplication extends Application implements EventHandler<Action
         label.setLayoutY(79);
         label.setPrefSize(322, 51);
         label.setFont(new Font("Ink Free", 40));
+        label.setStyle("-fx-text-fill: white;");
 
         root.getChildren().addAll(btnInstructions, btnStart, easy, hard, label);
 
@@ -110,8 +117,11 @@ public class HelloApplication extends Application implements EventHandler<Action
         primaryStage.setTitle("Hello World");
         primaryStage.show();
     }
-
     private void Instructions(ActionEvent event) {
+    AnchorPane root =new AnchorPane();
+    root.setPrefSize(1000,800);
+    Scene scene = new Scene(root);
+
 
     }
 
@@ -693,9 +703,8 @@ public class HelloApplication extends Application implements EventHandler<Action
                     try {
                         battle.purchaseWeapon(code, lane);
                     } catch (InsufficientResourcesException | InvalidLaneException e) {
-                        // Handle exceptions here, e.g., show an alert to the user
+                        showError(e.getMessage());
                     }
-                    moveTitan();
                     alertStage.close();
                 }
             });
@@ -800,6 +809,7 @@ public class HelloApplication extends Application implements EventHandler<Action
     }
 
 
+
     public static void moveTitan() {
         int count = 0;
         gridPane1.getChildren().clear();
@@ -808,58 +818,73 @@ public class HelloApplication extends Application implements EventHandler<Action
         gridPane4.getChildren().clear();
         gridPane5.getChildren().clear();
 
-
-
-
         for (Lane l : lanes) {
+            Label laneHealthLabel = new Label("Danger Level: " + l.getDangerLevel());
 
+            laneHealthLabel.setTranslateX(10);
+            laneHealthLabel.setTranslateY(10);
 
             for (Titan t : l.getTitans()) {
                 Rectangle rectangle = new Rectangle();
-
-                rectangle.setWidth(30);
-                ;
-                rectangle.setHeight(30);
-                ;
+                Label damageLabel = new Label("Damage: " + t.getDamage());
+                Label healthLabel = new Label("Health: " + t.getCurrentHealth());
 
                 if (t instanceof PureTitan) {
                     rectangle.setFill(Color.RED);
-
+                    rectangle.setWidth(30);
+                    rectangle.setHeight(30);
                 } else if (t instanceof AbnormalTitan) {
                     rectangle.setFill(Color.YELLOW);
                     rectangle.setTranslateY(21);
-
+                    rectangle.setWidth(50);
+                    rectangle.setHeight(50);
                     rectangle.setTranslateX(t.getDistance() * 5);
                 } else if (t instanceof ArmoredTitan) {
                     rectangle.setFill(Color.BLUE);
                     rectangle.setTranslateY(42);
-
-
+                    rectangle.setWidth(70);
+                    rectangle.setHeight(70);
                 } else if (t instanceof ColossalTitan) {
-
                     rectangle.setFill(Color.BLACK);
                     rectangle.setTranslateY(20);
-
+                    rectangle.setWidth(90);
+                    rectangle.setHeight(90);
                 }
 
                 rectangle.setTranslateX(t.getDistance() * 10);
-                if (count == 0)
-                    gridPane1.getChildren().add(rectangle);
-                else if (count == 1)
-                    gridPane2.getChildren().add(rectangle);
-                else if (count == 2)
-                    gridPane3.getChildren().add(rectangle);
-                else if (count == 3)
-                    gridPane4.getChildren().add(rectangle);
-                else if (count == 4)
-                    gridPane5.getChildren().add(rectangle);
+                damageLabel.setTranslateX(rectangle.getTranslateX() + 20);
+                damageLabel.setTranslateY(rectangle.getTranslateY() + 20);
+                healthLabel.setTranslateX(rectangle.getTranslateX() + 20);
+                healthLabel.setTranslateY(rectangle.getTranslateY() + 40);
 
+                if (count == 0) {
+                    gridPane1.getChildren().addAll(rectangle, damageLabel, healthLabel);
+                } else if (count == 1) {
+                    gridPane2.getChildren().addAll(rectangle, damageLabel, healthLabel);
+                } else if (count == 2) {
+                    gridPane3.getChildren().addAll(rectangle, damageLabel, healthLabel);
+                } else if (count == 3) {
+                    gridPane4.getChildren().addAll(rectangle, damageLabel, healthLabel);
+                } else if (count == 4) {
+                    gridPane5.getChildren().addAll(rectangle, damageLabel, healthLabel);
+                }
             }
-                count++;
 
+            if (count == 0) {
+                gridPane1.getChildren().add(laneHealthLabel);
+            } else if (count == 1) {
+                gridPane2.getChildren().add(laneHealthLabel);
+            } else if (count == 2) {
+                gridPane3.getChildren().add(laneHealthLabel);
+            } else if (count == 3) {
+                gridPane4.getChildren().add(laneHealthLabel);
+            } else if (count == 4) {
+                gridPane5.getChildren().add(laneHealthLabel);
             }
+
+            count++;
         }
-
+    }
         public static void main (String[]args){
             launch(args);
         }
