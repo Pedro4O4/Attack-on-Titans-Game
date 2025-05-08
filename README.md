@@ -7,12 +7,12 @@ Defend Wall Rose's Utopia District from the onslaught of titans using Anti-Titan
 
 ## 📜 Outline
 
-1. 🎮 [Intro](#-intro)  
-2. 🗺️ [Space Setting](#-space-setting)  
-3. 🛡️ [Enemy Characters (Titans)](#-enemy-characters-titans)  
-4. 🏹 [Friendly Pieces (Weapons)](#-friendly-pieces-weapons)  
-5. ⚔️ [Game Rules](#-game-rules)  
-6. 🔄 [Game Flow](#-game-flow)
+1. 🎮 [Intro]
+2. 🗺️ [Space Setting]
+3. 🛡️ [Enemy Characters (Titans)]
+4. 🏹 [Friendly Pieces (Weapons)]
+5. ⚔️ [Game Rules]
+6. 🔄 [Game Flow]
 
 ---
 
